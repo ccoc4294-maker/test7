@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Primo Barbershop — Cut, Shave, Fade</title>
+<meta name="description" content="Primo Gentleman's Barbershop in Angeles City, Pampanga. Book a cut, shave or fade online.">
+<link rel="icon" href="assets/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+<div class="setup-banner" id="configBanner" hidden>Setup needed: open <b>config.js</b> and paste your Supabase project URL and anon key (see README.md).</div>
+
+<header>
+  <div class="nav-row">
+    <div class="brand"><img src="assets/logo.jpg" alt="Primo Barbershop logo"> Primo Barbershop</div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">☰</button>
+    <nav class="tabs" id="tabs">
+      <button data-tab="home" class="active">Home</button>
+      <button data-tab="services">Services</button>
+      <button data-tab="barbers">Barbers</button>
+      <button data-tab="promos">Promos</button>
+      <button data-tab="book">Book Now</button>
+      <button data-tab="gallery">Gallery</button>
+      <button data-tab="about">About</button>
+      
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="panel active" id="tab-home">
+    <div class="hero">
+      <div>
+        <p class="kicker">Gentleman's Barbershop</p>
+        <h1>Your look. Your style. Your barber.</h1>
+        <p class="lede">Premium grooming without the premium attitude. Real barbers, real chairs, no shortcuts.</p>
+        <div class="status-line"><span class="dot" id="statusDot"></span><span id="statusText">Checking hours…</span></div>
+        <div class="cta-row">
+          <button class="btn" onclick="showTab('book')">Book an appointment</button>
+          <button class="btn ghost" onclick="showTab('services')">View services</button>
+        </div>
+      </div>
+      <div class="hero-photo"><img src="assets/shop.jpg" alt="Inside Primo Barbershop"></div>
+    </div>
+    <div class="strip">
+      <div><h3>Est. 2018</h3><p>Seven years cutting hair in this neighborhood, one chair at a time.</p></div>
+      <div><h3>Any barber, any fade</h3><p>Book with whoever you trust, or let us assign the next open chair.</p></div>
+      <div><h3>Walk-ins welcome</h3><p>Join the live queue from your phone before you even leave the house.</p></div>
+    </div>
+  </section>
+
+  <section class="panel" id="tab-services">
+    <p class="kicker">The Menu</p>
+    <h2>Cut. Shave. Fade.</h2>
+    <p class="lede">Every service below can be booked directly — pick one and we'll take you straight to scheduling.</p>
+    <div id="serviceList"></div>
+  </section>
+
+  <section class="panel" id="tab-barbers">
+    <p class="kicker">Meet the Barbers</p>
+    <h2>Choose who cuts your hair</h2>
+    <p class="lede">Book with a specific barber, or pick "Any barber" at checkout for the soonest open chair.</p>
+    <div class="card-grid" id="barberList"></div>
+  </section>
+
+  <section class="panel" id="tab-promos">
+    <p class="kicker">This Month</p>
+    <h2>Promos</h2>
+    <div id="promoList"></div>
+  </section>
+
+  <section class="panel" id="tab-book">
+    <p class="kicker">Book a Chair</p>
+    <h2>Reserve your time</h2>
+    <div class="book-shell">
+      <div>
+        <div class="steps" id="stepDots"></div>
+        <div id="bookStepContent"></div>
+      </div>
+      <div>
+        <div class="side-card">
+          <h3>Prefer to skip the line?</h3>
+          <p style="font-size:.88rem;">Join today's walk-in queue instead — no time slot needed.</p>
+          <div class="field" style="margin-top:12px;">
+            <label for="wqName">Name</label><input id="wqName" placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="wqPhone">Phone</label><input id="wqPhone" type="tel" placeholder="09xx xxx xxxx">
+          </div>
+          <button class="btn small" onclick="joinQueue()">Join walk-in queue</button>
+          <div id="queueMsg" style="margin-top:10px;font-size:.85rem;"></div>
+        </div>
+        <div class="side-card">
+          <h3>My booking &amp; points</h3>
+          <p style="font-size:.85rem;">Enter the phone number you booked with. Add your booking code to view or cancel that booking.</p>
+          <div class="field"><label for="lkPhone">Phone number</label><input id="lkPhone" type="tel" placeholder="09xx xxx xxxx"></div>
+          <div class="field"><label for="lkCode">Booking code (optional)</label><input id="lkCode" placeholder="e.g. A1B2C3" maxlength="6" style="text-transform:uppercase;"></div>
+          <button class="btn ghost small" onclick="lookupCustomer()">Look up</button>
+          <div class="lookup-result" id="lookupResult"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="tab-gallery">
+    <p class="kicker">Gallery</p>
+    <h2>Inside the shop</h2>
+    <div class="gallery-grid">
+      <figure class="wide"><img src="assets/shop.jpg" alt="Row of leather barber chairs at Primo Barbershop"></figure>
+      <figure><img src="assets/gallery-1.jpg" alt="Leather barber chairs"></figure>
+      <figure><img src="assets/gallery-2.jpg" alt="Pendant lamps and track lighting"></figure>
+      <figure><img src="assets/gallery-3.jpg" alt="Kids car chair and bar stools"></figure>
+      <figure><img src="assets/gallery-4.jpg" alt="Primo Barbershop sign on the wall"></figure>
+    </div>
+    <p class="kicker" style="margin-top:44px;">What customers say</p>
+    <div id="reviewList"></div>
+  </section>
+
+  <section class="panel" id="tab-about">
+    <p class="kicker">About &amp; Contact</p>
+    <h2>Come find the chair</h2>
+    <div class="about-grid">
+      <div>
+        <p class="lede">Primo Gentleman's Barbershop opened in 2018 with one idea: a barbershop should feel like a shop, not a salon. Leather chairs, straight razors, and barbers who've been doing this long enough to know when to talk and when not to.</p>
+        <div class="contact-line"><span>Phone</span> 0962 928 1401</div>
+        <div class="contact-line"><span>Address</span> 511 MacArthur Hwy, Angeles City, 2009 Pampanga</div>
+        <div class="contact-line"><span>Facebook</span> <a href="https://www.facebook.com/zachsbarbershop13" target="_blank" rel="noopener">facebook.com/zachsbarbershop13</a></div>
+        <div class="cta-row">
+          <a class="btn ghost small" href="https://www.google.com/maps/search/?api=1&query=511+MacArthur+Hwy+Angeles+City+2009+Pampanga" target="_blank" rel="noopener">Get directions</a>
+          <a class="btn ghost small" href="https://www.facebook.com/zachsbarbershop13" target="_blank" rel="noopener">See reviews on Facebook</a>
+        </div>
+        <p class="kicker" style="margin-top:34px;">FAQ</p>
+        <div id="faqList"></div>
+      </div>
+      <div class="info-card">
+        <h3>Shop hours</h3>
+        <div id="hoursList"></div>
+        <h3 style="margin-top:22px;">Good to know</h3>
+        <div class="row-line"><span>Walk-ins</span><span>Always welcome</span></div>
+        <div class="row-line"><span>Payment</span><span>Cash / GCash</span></div>
+        <div class="row-line"><span>Cancellations</span><span>Up to 2 hrs before</span></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<button class="mobile-book" onclick="showTab('book')">✂️ Book an Appointment</button>
+<footer>Primo Gentleman's Barbershop · Est. 2018 · Cut · Shave · Fade<br><button class="owner-link" id="staffOpen">Owner login</button></footer>
+
+<!-- Owner login -->
+<div class="staff-overlay" id="staffOverlay">
+  <div class="pin-box">
+    <h3 style="color:var(--brass);">Owner Login</h3>
+    <p style="font-size:.85rem;">Authorized access only.</p>
+    <input id="ownerUser" type="email" placeholder="Owner email" autocomplete="username" style="margin-bottom:10px;"><div class="pass-wrap"><input id="ownerPass" type="password" placeholder="Password" autocomplete="current-password"><button type="button" class="pass-toggle" id="passToggle" aria-pressed="false" onclick="togglePass()">Show</button></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn small" id="loginBtn" onclick="tryLogin()">Log in</button>
+      <button class="btn ghost small" onclick="closeStaff()">Cancel</button>
+    </div>
+    <div id="pinError" style="color:var(--bad);font-size:.82rem;margin-top:8px;"></div>
+  </div>
+</div>
+
+<!-- Admin dashboard -->
+<div class="admin-shell" id="adminShell">
+  <div class="admin-top">
+    <strong style="font-family:var(--font-display);color:var(--brass);">Owner Dashboard</strong>
+    <button class="btn ghost small" onclick="closeAdmin()">Log out</button>
+  </div>
+  <div class="admin-tabs" id="adminTabs">
+    <button data-atab="today" class="active">Today</button>
+    <button data-atab="all">All Bookings</button>
+    <button data-atab="queue">Walk-in Queue</button>
+    <button data-atab="reports">Reports</button>
+    <button data-atab="inventory">Inventory</button>
+    <button data-atab="staff">Staff</button>
+  </div>
+  <div id="adminMsg" class="empty-slots" role="alert" style="padding:10px 20px 0;"></div>
+  <div class="admin-body" id="adminBody"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
